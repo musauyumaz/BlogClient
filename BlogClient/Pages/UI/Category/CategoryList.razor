@@ -1,5 +1,5 @@
 ﻿@page "/categoryList"
-@using BlogClient.Contracts.Category;
+
 
 <MudTable Items="@Categories" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
     <HeaderContent>
@@ -13,17 +13,14 @@
 </MudTable>
 
 
-
 @code {
-
     [Inject]
-    IHttpClientService HttpClientService { get; set; }
+    ICategoryService CategoryService { get; set; }
     private IEnumerable<ListCategory> Categories { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Categories = (await HttpClientService.Get<Root>(new() { Controller = "Categories", Action = "GetAll" })).Categories;
+        Categories = await CategoryService.GetCategoryList();
         Console.WriteLine();
     }
-
 }
