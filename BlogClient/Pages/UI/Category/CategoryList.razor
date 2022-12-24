@@ -1,0 +1,29 @@
+﻿@page "/categoryList"
+@using BlogClient.Contracts.Category;
+
+<MudTable Items="@Categories" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Description</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+
+@code {
+
+    [Inject]
+    IHttpClientService HttpClientService { get; set; }
+    private IEnumerable<ListCategory> Categories { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = (await HttpClientService.Get<Root>(new() { Controller = "Categories", Action = "GetAll" })).Categories;
+        Console.WriteLine();
+    }
+
+}
