@@ -5,5 +5,6 @@ namespace BlogClient.Services.Models.Abstract
     public interface ICategoryService
     {
         Task<List<ListCategory>> GetCategoryList();
+        Task<CreateCategoryResponse> AddCategory(CreateCategory addCategory);
     }
 }

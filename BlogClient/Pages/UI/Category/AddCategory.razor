@@ -1,0 +1,33 @@
+﻿@page "/addCategory"
+
+<EditForm Model="@category" OnValidSubmit="CreateCategory">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Name" HelperText="Max. 8 characters"
+                                  @bind-Value="category.Name" For="@(() => category.Name)" />
+                    <MudTextField Label="Description" Class="mt-3"
+                                  @bind-Value="category.Description" For="@(() => category.Description)" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+
+@code {
+    [Inject]
+    public ICategoryService CategoryService { get; set; }
+    CreateCategory category = new();
+
+    private async void CreateCategory()
+    {
+        var data = await CategoryService.AddCategory(category);
+        Console.WriteLine(); 
+    }
+}

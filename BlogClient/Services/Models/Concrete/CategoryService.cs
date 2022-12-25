@@ -12,8 +12,12 @@ namespace BlogClient.Services.Models.Concrete
             _httpClientService = httpClientService;
         }
 
+        public async Task<CreateCategoryResponse> AddCategory(CreateCategory addCategory)
+            => (await _httpClientService.Post<CreateCategory, CreateCategoryResponse>(new() { Controller = "Categories", Action = "Create" }, addCategory));
+
+
         public async Task<List<ListCategory>> GetCategoryList()
             => (await _httpClientService.Get<Root>(new() { Controller = "Categories", Action = "GetAll" })).Categories;
-        
+
     }
 }

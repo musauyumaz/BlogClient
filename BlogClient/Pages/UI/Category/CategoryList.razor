@@ -5,12 +5,19 @@
     <HeaderContent>
         <MudTh>Name</MudTh>
         <MudTh>Description</MudTh>
+        <MudTh>Update</MudTh>
+        <MudTh>Delete</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Update"><MudButton Variant="Variant.Filled" Color="Color.Success" Size="Size.Small">Update</MudButton></MudTd>
+        <MudTd DataLabel="Update"><MudButton Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Delete</MudButton></MudTd>
     </RowTemplate>
 </MudTable>
+<MudButton Variant="Variant.Filled" Color="Color.Info">Yeni Kategori</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Warning">Kategori Listesi</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Error">Kategori Açıklamalar</MudButton>
 
 
 @code {

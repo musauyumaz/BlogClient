@@ -31,7 +31,22 @@ namespace BlogClient.Services
             else
                 url = $"{Url(requestParameter)}{(!String.IsNullOrEmpty(id) ? "/" + id : "")}";
 
-            return await _httpClient.GetFromJsonAsync<T>(url, options);
+             return await _httpClient.GetFromJsonAsync<T>(url, options);
+        }
+
+        public async Task<TResponse> Post<TRequest,TResponse>(RequestParameter requestParameter, TRequest body)
+        {
+            JsonSerializerOptions options = new();
+            options.PropertyNameCaseInsensitive = true;
+            string url = String.Empty;
+            if (!String.IsNullOrEmpty(requestParameter.FullEndpoint))
+                url = requestParameter.FullEndpoint;
+            else
+                url = $"{Url(requestParameter)}";
+
+            using HttpResponseMessage httpResponseMessage = await _httpClient.PostAsJsonAsync<TRequest>(url, body,options);
+            var data = await httpResponseMessage.Content.ReadAsStringAsync();
+            return await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
         }
     }
     public class RequestParameter
