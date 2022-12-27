@@ -48,6 +48,37 @@ namespace BlogClient.Services
             var data = await httpResponseMessage.Content.ReadAsStringAsync();
             return await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
         }
+
+        public async Task<TResponse> Put<TRequest, TResponse>(RequestParameter requestParameter, TRequest body)
+        {
+            JsonSerializerOptions options = new();
+            options.PropertyNameCaseInsensitive = true;
+            string url = String.Empty;
+            if (!String.IsNullOrEmpty(requestParameter.FullEndpoint))
+                url = requestParameter.FullEndpoint;
+            else
+                url = $"{Url(requestParameter)}";
+
+            using HttpResponseMessage httpResponseMessage = await _httpClient.PutAsJsonAsync<TRequest>(url, body, options);
+            var data = await httpResponseMessage.Content.ReadAsStringAsync();
+            return await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
+        }
+
+        public async Task<TResponse> Delete<TResponse>(RequestParameter requestParameter, string id = null)
+        {
+            JsonSerializerOptions options = new();
+            options.PropertyNameCaseInsensitive = true;
+            string url = String.Empty;
+            if (!String.IsNullOrEmpty(requestParameter.FullEndpoint))
+                url = requestParameter.FullEndpoint;
+            else
+                url = $"{Url(requestParameter)}{(!String.IsNullOrEmpty(id) ? "/" + id : "")}";
+
+            using HttpResponseMessage httpResponseMessage = await _httpClient.DeleteAsync(url);
+            var data = await httpResponseMessage.Content.ReadAsStringAsync();
+            return await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
+
+        }
     }
     public class RequestParameter
     {

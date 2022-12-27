@@ -13,21 +13,35 @@
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+
                 </MudCardActions>
             </MudCard>
         </MudItem>
     </MudGrid>
 </EditForm>
 
+<MudButton Variant="Variant.Filled" Color="Color.Warning" Class="ml-auto" OnClick="Test1">Test</MudButton>
 
 @code {
     [Inject]
     public ICategoryService CategoryService { get; set; }
+    [Inject]
+    public IToaster Toaster { get; set; }
+
+
     CreateCategory category = new();
 
     private async void CreateCategory()
     {
         var data = await CategoryService.AddCategory(category);
-        Console.WriteLine(); 
+        Toaster.Success($"{data.CategoryDTO.Id} - {data.CategoryDTO.Name} - {data.CategoryDTO.Description} - {data.CategoryDTO.CreatedDate}  -  Eklendi", "Kategori Eklendi");
+    }
+    private void Test1()
+    {
+        Toaster.Success("Başarı", "Başarı", options => { options.ShowProgressBar = true;options.VisibleStateDuration = 10000; } );
+        Toaster.Info("Bilgi", "Bilgi", options => options.ShowProgressBar = true);
+        Toaster.Error("Hata", "Hata", options => options.ShowProgressBar = true);
+        Toaster.Warning("Uyarı", "Uyarı", options => options.ShowProgressBar = true);
+
     }
 }
