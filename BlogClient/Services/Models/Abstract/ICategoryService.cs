@@ -4,7 +4,10 @@ namespace BlogClient.Services.Models.Abstract
 {
     public interface ICategoryService
     {
-        Task<List<ListCategory>> GetCategoryList();
-        Task<CreateCategoryResponse> AddCategory(CreateCategory addCategory);
+        Task<(List<ListCategory> listCategories, int totalCategoryCount)> GetCategoryList(int page, int size);
+        Task<CategoryResponse> GetCategoryById(int id);
+        Task<CategoryResponse> AddCategory(CreateCategory addCategory);
+        Task<CategoryResponse> DeleteCategory(int id);
+        Task<CategoryResponse> UpdateCategory(CategoryUpdate updateCategory);
     }
 }

@@ -1,0 +1,98 @@
+﻿@inherits ComponentBase
+
+<h1>Kategoriler</h1>
+<MudTable @ref="@_table" Items="@Categories" RowsPerPage="5" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Description</MudTh>
+        <MudTh>Created Date</MudTh>
+        <MudTh>Updated Date</MudTh>
+        <MudTh>Is Active</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Created Date">@context.CreatedDate</MudTd>
+        <MudTd DataLabel="Updated Date">@context.UpdatedDate</MudTd>
+        <MudTd DataLabel="Is Active">@context.IsActive</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudPagination SelectedChanged="OnPageChanged" Count="(CountData % 5 == 0 ? (CountData / 5) : (CountData / 5) + 1)" Class="pa-4" />
+    </PagerContent>
+</MudTable>
+@code {
+    private MudTable<ListCategory> _table;
+    [Inject]
+    ICategoryService CategoryService { get; set; }
+    [Inject]
+    public IToaster Toaster { get; set; }
+
+    [Parameter]
+    public IEnumerable<ListCategory> Categories { get; set; }
+    [Parameter]
+    public EventCallback OnDeletedItem { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
+
+    [Parameter]
+    public int CountData { get; set; }
+
+
+    private async Task DeleteCategory(int id)
+    {
+        Category category = (await CategoryService.DeleteCategory(id)).CategoryDTO;
+        Toaster.Success($"{category.Name} Başarıyla Silinmiştir", "Kategori Silindi", options => { options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
+        await OnDeletedItem.InvokeAsync();
+    }
+
+    private async void PageChanged(int i)
+    {
+        await OnPageChanged.InvokeAsync(i - 1);
+    }
+}
+
+
+
+
+
+
+
+@*<MudTable Items="@Categories" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Description</MudTh>
+        <MudTh>Update</MudTh>
+        <MudTh>Delete</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Update"><MudButton Variant="Variant.Filled" Color="Color.Success" Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit">Update</MudButton></MudTd>
+        <MudTd DataLabel="Delete"><MudButton Variant="Variant.Filled" Color="Color.Error" ButtonType="ButtonType.Button" Size="Size.Small" OnClick="@(() => DeleteCategory(context.Id))">Delete</MudButton></MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    [Inject]
+    ICategoryService CategoryService { get; set; }
+    [Inject]
+    public IToaster Toaster { get; set; }
+
+    [Parameter]
+    public IEnumerable<ListCategory> Categories { get; set; }
+
+    [Parameter]
+    public EventCallback OnDeletedItem { get; set; }
+
+
+    private async Task DeleteCategory(int id)
+    {
+        Category category = (await CategoryService.DeleteCategory(id)).CategoryDTO;
+        Toaster.Success($"{category.Name} Başarıyla Silinmiştir", "Kategori Silindi", options => { options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
+        await OnDeletedItem.InvokeAsync();
+    }
+
+}*@

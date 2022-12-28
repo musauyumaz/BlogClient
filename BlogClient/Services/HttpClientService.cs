@@ -15,10 +15,11 @@ namespace BlogClient.Services
         }
         private string Url(RequestParameter requestParameter)
         {
-            string url = $"{(!String.IsNullOrEmpty(requestParameter.BaseUrl) ? requestParameter.BaseUrl : _configuration["BaseUrl"])}/" +
-                $"{requestParameter.Controller}" +
-                $"{(!String.IsNullOrEmpty(requestParameter
-                .Action) ? "/" + requestParameter.Action : "")}";
+            string url = 
+                 $"{(!String.IsNullOrEmpty(requestParameter.BaseUrl) ? requestParameter.BaseUrl : _configuration["BaseUrl"])}/" +
+                 $"{requestParameter.Controller}" +
+                 $"{(!String.IsNullOrEmpty(requestParameter.Action) ? "/" + requestParameter.Action : "")}" +
+                 $"{(!String.IsNullOrEmpty(requestParameter.QueryString) ? "?" + requestParameter.QueryString : "")}";
             return url;
         }
         public async Task<T> Get<T>(RequestParameter requestParameter, string id = null)
@@ -31,10 +32,10 @@ namespace BlogClient.Services
             else
                 url = $"{Url(requestParameter)}{(!String.IsNullOrEmpty(id) ? "/" + id : "")}";
 
-             return await _httpClient.GetFromJsonAsync<T>(url, options);
+            return await _httpClient.GetFromJsonAsync<T>(url, options);
         }
 
-        public async Task<TResponse> Post<TRequest,TResponse>(RequestParameter requestParameter, TRequest body)
+        public async Task<TResponse> Post<TRequest, TResponse>(RequestParameter requestParameter, TRequest body)
         {
             JsonSerializerOptions options = new();
             options.PropertyNameCaseInsensitive = true;
@@ -44,7 +45,7 @@ namespace BlogClient.Services
             else
                 url = $"{Url(requestParameter)}";
 
-            using HttpResponseMessage httpResponseMessage = await _httpClient.PostAsJsonAsync<TRequest>(url, body,options);
+            using HttpResponseMessage httpResponseMessage = await _httpClient.PostAsJsonAsync<TRequest>(url, body, options);
             var data = await httpResponseMessage.Content.ReadAsStringAsync();
             return await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
         }
@@ -84,6 +85,7 @@ namespace BlogClient.Services
     {
         public string? Controller { get; set; }
         public string? Action { get; set; }
+        public string? QueryString { get; set; }
         public HttpHeaders? Headers { get; set; }
         public string? BaseUrl { get; set; }
         public string? FullEndpoint { get; set; }

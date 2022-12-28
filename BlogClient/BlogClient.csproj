@@ -14,7 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Admin\" />
+    <Folder Include="Pages\UI\" />
+    <Folder Include="Shared\Admin\Components\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\web\.github\ISSUE_TEMPLATE\bug-report-for-adminlte-v2-4-x.md" />
+    <None Include="wwwroot\web\.github\ISSUE_TEMPLATE\bug-report-for-adminlte-v3-x.md" />
+    <None Include="wwwroot\web\.github\ISSUE_TEMPLATE\feature-request-for-adminlte-v3-x.md" />
   </ItemGroup>
 
 </Project>

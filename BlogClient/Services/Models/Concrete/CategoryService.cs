@@ -12,12 +12,21 @@ namespace BlogClient.Services.Models.Concrete
             _httpClientService = httpClientService;
         }
 
-        public async Task<CreateCategoryResponse> AddCategory(CreateCategory addCategory)
-            => (await _httpClientService.Post<CreateCategory, CreateCategoryResponse>(new() { Controller = "Categories", Action = "Create" }, addCategory));
+        public async Task<CategoryResponse> AddCategory(CreateCategory addCategory)
+            => (await _httpClientService.Post<CreateCategory, CategoryResponse>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "Create" }, addCategory));
 
+        public async Task<CategoryResponse> DeleteCategory(int id)
+            => await _httpClientService.Delete<CategoryResponse>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "Delete" }, id.ToString());
 
-        public async Task<List<ListCategory>> GetCategoryList()
-            => (await _httpClientService.Get<Root>(new() { Controller = "Categories", Action = "GetAll" })).Categories;
+        public async Task<CategoryResponse> GetCategoryById(int id)
+            => await _httpClientService.Get<CategoryResponse>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "GetById" }, id.ToString());
 
+        public async Task<(List<ListCategory> listCategories, int totalCategoryCount)> GetCategoryList(int page, int size)
+        {
+            var data = (await _httpClientService.Get<Root>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "GetAll", QueryString = $"page={page}&size={size}" }));
+            return (data.Categories, data.TotalCategoryCount); 
+        }
+        public async Task<CategoryResponse> UpdateCategory(CategoryUpdate updateCategory)
+            => await _httpClientService.Put<CategoryUpdate, CategoryResponse>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "Update" }, updateCategory);
     }
 }

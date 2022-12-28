@@ -1,0 +1,63 @@
+﻿@inherits LayoutComponentBase
+
+
+<MudThemeProvider DefaultScrollbar="true" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<ToastContainer />
+
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
+
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+    </MudAppBar>
+    
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">Application</MudText>
+        </MudDrawerHeader>
+        <MudPaper Width="250px" Class="py-3" Elevation="0">
+            <MudNavMenu>
+                <MudText Typo="Typo.h6" Class="px-4">Blog</MudText>
+                <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Secondary Text</MudText>
+                <MudDivider Class="my-2" />
+                <MudNavLink Href="/category">Kategoriler</MudNavLink>
+                <MudNavLink Href="#">Başlıklar</MudNavLink>
+                <MudNavLink Href="#">Yazarlar</MudNavLink>
+                <MudNavGroup Title="Grafikler" Expanded="true">
+                    <MudNavLink Href="#">Grafik 1</MudNavLink>
+                    <MudNavLink Href="#">Grafik 2</MudNavLink>
+                    <MudNavLink Href="#">Grafik 3</MudNavLink>
+                </MudNavGroup>
+                <MudNavLink Href="#">Hakkımızda</MudNavLink>
+                <MudNavLink Href="#">İletişim & Mesajlar</MudNavLink>
+                <MudNavLink Href="#">Yazılar</MudNavLink>
+                <MudNavLink Href="#">Yetkilendirmeler</MudNavLink>
+                <MudNavLink Href="#">Galeri</MudNavLink>
+                <MudNavLink Href="#">Hata Sayfaları</MudNavLink>
+                <MudNavLink Href="#">Siteye Git</MudNavLink>
+                <MudNavLink Href="#">Çıkış Yap</MudNavLink>
+                <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Light/Dark" />
+            </MudNavMenu>
+        </MudPaper>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+@code {
+    bool _drawerOpen = true;
+    private MudTheme _theme = new();
+    private bool _isDarkMode;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    
+}
+
+

@@ -7,8 +7,9 @@
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
     }
-    public class CreateCategoryResponse
+    public class CategoryResponse
     {
         public Category CategoryDTO { get; set; }
+        public int TotalCategoryCount { get; set; }
     }
 }
