@@ -24,9 +24,13 @@ namespace BlogClient.Services.Models.Concrete
         public async Task<(List<ListCategory> listCategories, int totalCategoryCount)> GetCategoryList(int page, int size)
         {
             var data = (await _httpClientService.Get<Root>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "GetAll", QueryString = $"page={page}&size={size}" }));
-            return (data.Categories, data.TotalCategoryCount); 
+            return (data.Categories, data.TotalCategoryCount);
         }
-        public async Task<CategoryResponse> UpdateCategory(CategoryUpdate updateCategory)
-            => await _httpClientService.Put<CategoryUpdate, CategoryResponse>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "Update" }, updateCategory);
+
+        public async Task<GetCategoryWithHeadings> GetCategoryWithHeadings(int id)
+            => await _httpClientService.Get<GetCategoryWithHeadings>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "GetCategoryHeadingsByCategoryId" }, id.ToString());
+
+        public async Task<CategoryResponse> UpdateCategory(CategoryUpdateRoot updateCategory)
+            => await _httpClientService.Put<CategoryUpdateRoot, CategoryResponse>(new() { BaseUrl = "http://localhost:5058/api", Controller = "Categories", Action = "Update" }, updateCategory);
     }
 }

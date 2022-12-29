@@ -1,0 +1,35 @@
+﻿@inject ISnackbar _snackBar;
+@inject ICategoryService _categoryService;
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Create" Class="mr-3 mb-n1" />
+            Kategori Ekleme
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+            <MudTextField Label="Name" @bind-Value="createCategory.Name" For="@(() => createCategory.Name)" Required="true" RequiredError="Kategori Adını Boş Geçemezsiniz!" />
+            <MudTextField Label="Description" Class="mt-3" @bind-Value="createCategory.Description" For="@(() => createCategory.Description)" Required="true" RequiredError="Açıklama Alanını Boş Geçemezsiniz." />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="CreateCategory">Ekle</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+    CreateCategory createCategory = new CreateCategory();
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async void CreateCategory()
+    {
+        var data = await _categoryService.AddCategory(createCategory);
+        MudDialog.Close(DialogResult.Ok(data.CategoryDTO.Name));
+        _snackBar.Add($"{data.CategoryDTO.Name} Sisteme Eklendi", Severity.Success);
+    }
+}
+

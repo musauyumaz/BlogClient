@@ -1,0 +1,41 @@
+﻿@inject ICategoryService _categoryService;
+@inject ISnackbar _snackBar;
+<MudDialog>
+    <DialogContent>
+        <MudTextField Label="Name" @bind-Value="categoryUpdate.Name" For="@(() => categoryUpdate.Name)" Required="true" RequiredError="Kategori Adını Boş Geçemezsiniz!" />
+        <MudTextField Label="Description" Class="mt-3" @bind-Value="categoryUpdate.Description" For="@(() => categoryUpdate.Description)" Required="true" RequiredError="Açıklama Alanını Boş Geçemezsiniz." />
+        <MudRadioGroup @bind-SelectedOption="categoryUpdate.IsActive">
+            <MudRadio Option="true" Color="Color.Primary" Dense="true">Aktif</MudRadio>
+            <MudRadio Option="false" Color="Color.Secondary" Dense="false">Pasif</MudRadio>
+        </MudRadioGroup>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Success" OnClick="UpdateCategory">Güncelle</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    CategoryUpdate categoryUpdate = new();
+    CategoryUpdateRoot categoryUpdateRoot = new();
+    [Parameter] public int Id { get; set; }
+
+    void Cancel() => MudDialog.Cancel();
+
+    protected async override Task OnInitializedAsync()
+    {
+        Category category = (await _categoryService.GetCategoryById(Id)).CategoryDTO;
+        categoryUpdate.Id = category.Id;
+        categoryUpdate.Name = category.Name;
+        categoryUpdate.Description = category.Description;
+        categoryUpdate.IsActive = category.IsActive;
+    }
+
+    private async Task UpdateCategory()
+    {
+        categoryUpdateRoot.UpdateCategoryDTO = categoryUpdate;
+        var data = await _categoryService.UpdateCategory(categoryUpdateRoot);
+        _snackBar.Add($"{categoryUpdate.Name} Güncellendi", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+}

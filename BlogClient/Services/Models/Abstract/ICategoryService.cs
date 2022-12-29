@@ -6,8 +6,9 @@ namespace BlogClient.Services.Models.Abstract
     {
         Task<(List<ListCategory> listCategories, int totalCategoryCount)> GetCategoryList(int page, int size);
         Task<CategoryResponse> GetCategoryById(int id);
+        Task<GetCategoryWithHeadings> GetCategoryWithHeadings(int id);
         Task<CategoryResponse> AddCategory(CreateCategory addCategory);
         Task<CategoryResponse> DeleteCategory(int id);
-        Task<CategoryResponse> UpdateCategory(CategoryUpdate updateCategory);
+        Task<CategoryResponse> UpdateCategory(CategoryUpdateRoot updateCategory);
     }
 }

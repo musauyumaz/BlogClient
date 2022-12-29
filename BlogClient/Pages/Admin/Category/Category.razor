@@ -1,26 +1,41 @@
 ﻿@layout AdminLayout
 @page "/admin/category"
+@page "/"
+@inject ICategoryService _categoryService;
+@inject IDialogService _dialogService;
 
 
-<MudGrid Spacing="1" Justify="Justify.Center">
-    <MudItem xs="2"><AddCategoryComponent OnAddedItem="@(()=> LoadData())" /></MudItem>
-    <MudItem xs="10"><CategoryListComponent CountData="DataCount" Categories="Categories" OnDeletedItem="@(()=> LoadData())" OnPageChanged="@((args)=> LoadData((int)args - 1))" /></MudItem>
-</MudGrid>
+<MudItem xs="12"><CategoryListComponent CountData="DataCount" Categories="Categories" OnHeadingClicked="@((args)=> OpenCategoryHeadingsDialog((int)args) )" OnDeletedItem="@(()=> LoadDataAsync())" OnPageChanged="@((args)=> LoadDataAsync((int)args - 1))" /></MudItem>
+<MudButton StartIcon="@Icons.Material.Filled.AddTask" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto mt-5" OnClick="OpenCreateCategoryDialogAsync">Yeni Kategori</MudButton>
+
 
 @code {
-    [Inject]
-    ICategoryService CategoryService { get; set; }
-
     public IEnumerable<ListCategory> Categories { get; set; }
     public int DataCount { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        await LoadData(0, 5);
+        await LoadDataAsync(0, 5);
     }
-    public async Task LoadData(int page = 0, int size = 5)
+    public async Task LoadDataAsync(int page = 0, int size = 5)
     {
-        var data = (await CategoryService.GetCategoryList(page, size));
+        var data = (await _categoryService.GetCategoryList(page, size));
         Categories = data.listCategories;
         DataCount = data.totalCategoryCount;
+    }
+    public async Task OpenCreateCategoryDialogAsync()
+    {
+        var dialog = await _dialogService.ShowAsync<CreateCategoryDialog>();
+        if (!(await dialog.Result).Cancelled)
+        {
+            await LoadDataAsync();
+        }
+    }
+
+    public async Task OpenCategoryHeadingsDialog(int id)
+    {
+        DialogParameters parameters = new();
+        parameters.Add("Id", id);
+        var dialog = _dialogService.ShowAsync<CategoryHeadingDialog>("Başlıklar",parameters);
+        await LoadDataAsync();
     }
 }

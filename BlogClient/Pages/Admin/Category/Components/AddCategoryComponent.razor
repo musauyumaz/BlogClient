@@ -1,16 +1,14 @@
 ﻿@inherits ComponentBase
+@inject ISnackbar _snackBar;
 
-<h1>Kategori Ekleme</h1>
 <EditForm Model="@category" OnValidSubmit="CreateCategory" style="height:500px">
     <DataAnnotationsValidator />
     <MudGrid>
-        <MudItem xs="12" sm="12" lg="12" xl="12" xxl="12">
+        <MudItem>
             <MudCard>
                 <MudCardContent>
-                    <MudTextField Label="Name"
-                                  @bind-Value="category.Name" For="@(() => category.Name)" />
-                    <MudTextField Label="Description" Class="mt-3"
-                                  @bind-Value="category.Description" For="@(() => category.Description)" />
+                    <MudTextField Label="Name" @bind-Value="category.Name" For="@(() => category.Name)" Required="true" RequiredError="Kategori Adını Boş Geçemezsiniz!" />
+                    <MudTextField Label="Description" Class="mt-3" @bind-Value="category.Description" For="@(() => category.Description)" Required="true" RequiredError="Açıklama Alanını Boş Geçemezsiniz." />
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Dark" Class="ml-auto">Ekle</MudButton>
@@ -19,9 +17,6 @@
         </MudItem>
     </MudGrid>
 </EditForm>
-
-<MudButton Variant="Variant.Filled" Color="Color.Warning" Class="ml-auto" OnClick="Test1">Test</MudButton>
-
 
 @code {
     [Inject]
@@ -40,19 +35,9 @@
     private async Task CreateCategory()
     {
         var data = await CategoryService.AddCategory(category);
-        Toaster.Success($"{data.CategoryDTO.Name} Eklendi", "Kategori Eklendi", options => { options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
+        _snackBar.Add($"{data.CategoryDTO.Name} Sisteme Eklendi", Severity.Success);
         await OnAddedItem.InvokeAsync();
         category.Description = String.Empty;
         category.Name = String.Empty;
-
-
-    }
-    private void Test1()
-    {
-        Toaster.Success("Başarı", "Başarı", options => { options.ShowProgressBar = true; options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
-        Toaster.Info("Bilgi", "Bilgi", options => { options.ShowProgressBar = true; options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
-        Toaster.Error("Hata", "Hata", options => { options.ShowProgressBar = true; options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
-        Toaster.Warning("Uyarı", "Uyarı", options => { options.ShowProgressBar = true; options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
-
     }
 }

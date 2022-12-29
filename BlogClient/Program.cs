@@ -16,7 +16,10 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IHttpClientService, HttpClientService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(options =>
+{
+    options.PopoverOptions.ThrowOnDuplicateProvider = false;
+});
 builder.Services.AddToaster(config=>
 {
     config.PositionClass = Defaults.Classes.Position.TopRight;

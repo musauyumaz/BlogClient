@@ -1,22 +1,31 @@
 ﻿@inherits ComponentBase
+@inject ICategoryService _categoryService;
+@inject ISnackbar _snackBar;
+@inject IDialogService _dialogService;
 
 <h1>Kategoriler</h1>
 <MudTable @ref="@_table" Items="@Categories" RowsPerPage="5" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
     <HeaderContent>
-        <MudTh>Id</MudTh>
+        <MudTh>#</MudTh>
         <MudTh>Name</MudTh>
         <MudTh>Description</MudTh>
         <MudTh>Created Date</MudTh>
         <MudTh>Updated Date</MudTh>
         <MudTh>Is Active</MudTh>
+        <MudTh>Delete</MudTh>
+        <MudTh>Update</MudTh>
+        <MudTh>Başlıklar</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTh>@context.Id</MudTh>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Description">@context.Description</MudTd>
         <MudTd DataLabel="Created Date">@context.CreatedDate</MudTd>
         <MudTd DataLabel="Updated Date">@context.UpdatedDate</MudTd>
         <MudTd DataLabel="Is Active">@context.IsActive</MudTd>
+        <MudTd DataLabel="Update"><MudButton Variant="Variant.Filled" Color="Color.Warning" Size="Size.Small" StartIcon="@Icons.Material.Filled.Edit" OnClick="(()=> UpdateCategory(context.Id))">Update</MudButton></MudTd>
+        <MudTd DataLabel="Delete"><MudButton Variant="Variant.Filled" Color="Color.Error" ButtonType="ButtonType.Button" Size="Size.Small" StartIcon="@Icons.Material.Filled.Delete" OnClick="@(() => DeleteCategory(context.Id))">Delete</MudButton></MudTd>
+        <MudTd DataLabel="Başlıklar"><MudButton Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.ViewHeadline" OnClick="(()=> HeadingClicked(context.Id))">Başlıklar</MudButton></MudTd>
     </RowTemplate>
     <PagerContent>
         <MudPagination SelectedChanged="OnPageChanged" Count="(CountData % 5 == 0 ? (CountData / 5) : (CountData / 5) + 1)" Class="pa-4" />
@@ -24,33 +33,43 @@
 </MudTable>
 @code {
     private MudTable<ListCategory> _table;
-    [Inject]
-    ICategoryService CategoryService { get; set; }
-    [Inject]
-    public IToaster Toaster { get; set; }
 
-    [Parameter]
-    public IEnumerable<ListCategory> Categories { get; set; }
-    [Parameter]
-    public EventCallback OnDeletedItem { get; set; }
-
-    [Parameter]
-    public EventCallback<int> OnPageChanged { get; set; }
-
-    [Parameter]
-    public int CountData { get; set; }
+    [Parameter] public IEnumerable<ListCategory> Categories { get; set; }
+    [Parameter] public EventCallback OnDeletedItem { get; set; }
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+    [Parameter] public EventCallback<int> OnHeadingClicked { get; set; }
+    [Parameter] public int CountData { get; set; }
 
 
     private async Task DeleteCategory(int id)
     {
-        Category category = (await CategoryService.DeleteCategory(id)).CategoryDTO;
-        Toaster.Success($"{category.Name} Başarıyla Silinmiştir", "Kategori Silindi", options => { options.VisibleStateDuration = 1500; options.HideTransitionDuration = 500; options.ShowTransitionDuration = 500; });
+        Category category = (await _categoryService.DeleteCategory(id)).CategoryDTO;
+        _snackBar.Add($"{category.Name} Başarıyla Silinmiştir", Severity.Success);
         await OnDeletedItem.InvokeAsync();
     }
 
     private async void PageChanged(int i)
     {
         await OnPageChanged.InvokeAsync(i - 1);
+    }
+
+    private async void HeadingClicked(int id)
+    {
+        await OnHeadingClicked.InvokeAsync(id);
+    }
+
+    private async void UpdateCategory(int id)
+    {
+        DialogParameters parameters = new();
+        DialogOptions options = new() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+        parameters.Add("Id", id);
+        var dialog = await _dialogService.ShowAsync<UpdateCategoryDialog>("Kategori Güncelle", parameters, options);
+
+        if (!dialog.Result.Result.Cancelled)
+        {
+            await OnPageChanged.InvokeAsync(1);
+            dialog.Close();
+        }
     }
 }
 

@@ -1,0 +1,33 @@
+﻿@inject ICategoryService _categoryService;
+
+<MudDialog>
+    <DialogContent>
+            <MudList Clickable="true">
+                <MudListItem Text="@GetCategoryWithHeadings.CategoryName"/>
+                    @foreach (var item in GetCategoryWithHeadings.HeadingsName)
+                    {
+                        <MudListItem Avatar="@Icons.Material.Filled.Umbrella">
+                            @item
+                        </MudListItem>
+                    }
+            </MudList>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public int Id { get; set; }
+    GetCategoryWithHeadings GetCategoryWithHeadings { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetCategoryWithHeadings = await _categoryService.GetCategoryWithHeadings(Id);
+    }
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+
+
+
+}
