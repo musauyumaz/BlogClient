@@ -14,17 +14,14 @@
     </MudAppBar>
     
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h5" Class="mt-1">Application</MudText>
-        </MudDrawerHeader>
         <MudPaper Width="250px" Class="py-3" Elevation="0">
             <MudNavMenu>
                 <MudText Typo="Typo.h6" Class="px-4">Blog</MudText>
-                <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Secondary Text</MudText>
+                @*<MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Secondary Text</MudText>*@
                 <MudDivider Class="my-2" />
-                <MudNavLink Href="/category">Kategoriler</MudNavLink>
+                <MudNavLink Href="/admin/category">Kategoriler</MudNavLink>
                 <MudNavLink Href="#">Başlıklar</MudNavLink>
-                <MudNavLink Href="#">Yazarlar</MudNavLink>
+                <MudNavLink Href="/admin/writer">Yazarlar</MudNavLink>
                 <MudNavGroup Title="Grafikler" Expanded="true">
                     <MudNavLink Href="#">Grafik 1</MudNavLink>
                     <MudNavLink Href="#">Grafik 2</MudNavLink>
@@ -36,7 +33,7 @@
                 <MudNavLink Href="#">Yetkilendirmeler</MudNavLink>
                 <MudNavLink Href="#">Galeri</MudNavLink>
                 <MudNavLink Href="#">Hata Sayfaları</MudNavLink>
-                <MudNavLink Href="#">Siteye Git</MudNavLink>
+                <MudNavLink Href="/">Siteye Git</MudNavLink>
                 <MudNavLink Href="#">Çıkış Yap</MudNavLink>
                 <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Light/Dark" />
             </MudNavMenu>

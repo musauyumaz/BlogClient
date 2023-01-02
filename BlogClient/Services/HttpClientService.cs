@@ -22,7 +22,7 @@ namespace BlogClient.Services
                  $"{(!String.IsNullOrEmpty(requestParameter.QueryString) ? "?" + requestParameter.QueryString : "")}";
             return url;
         }
-        public async Task<T> Get<T>(RequestParameter requestParameter, string id = null)
+        public async Task<T> GetAsync<T>(RequestParameter requestParameter, string id = null)
         {
             JsonSerializerOptions options = new();
             options.PropertyNameCaseInsensitive = true;
@@ -35,7 +35,7 @@ namespace BlogClient.Services
             return await _httpClient.GetFromJsonAsync<T>(url, options);
         }
 
-        public async Task<TResponse> Post<TRequest, TResponse>(RequestParameter requestParameter, TRequest body)
+        public async Task<TResponse> PostAsync<TRequest, TResponse>(RequestParameter requestParameter, TRequest body)
         {
             JsonSerializerOptions options = new();
             options.PropertyNameCaseInsensitive = true;
@@ -50,7 +50,7 @@ namespace BlogClient.Services
             return await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
         }
 
-        public async Task<TResponse> Put<TRequest, TResponse>(RequestParameter requestParameter, TRequest body)
+        public async Task<TResponse> PutAsync<TRequest, TResponse>(RequestParameter requestParameter, TRequest body)
         {
             JsonSerializerOptions options = new();
             options.PropertyNameCaseInsensitive = true;
@@ -65,7 +65,7 @@ namespace BlogClient.Services
             return await httpResponseMessage.Content.ReadFromJsonAsync<TResponse>();
         }
 
-        public async Task<TResponse> Delete<TResponse>(RequestParameter requestParameter, string id = null)
+        public async Task<TResponse> DeleteAsync<TResponse>(RequestParameter requestParameter, string id = null)
         {
             JsonSerializerOptions options = new();
             options.PropertyNameCaseInsensitive = true;

@@ -1,0 +1,37 @@
+﻿@inject ISnackbar _snackBar;
+@inject IWriterService _writerService;
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Create" Class="mr-3 mb-n1" />
+            Yazar Ekleme
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField Label="FirstName" @bind-Value="createWriter.FirstName" For="@(() => createWriter.FirstName)" Required="true" RequiredError="Yazar Adını Boş Geçemezsiniz!" />
+        <MudTextField Label="LastName" Class="mt-3" @bind-Value="createWriter.LastName" For="@(() => createWriter.LastName)" Required="true" RequiredError="Yazar Soyadını Boş Geçemezsiniz." />
+        <MudTextField Label="Email" Class="mt-3" @bind-Value="createWriter.Email" For="@(() => createWriter.Email)" Required="true" RequiredError="Yazar Emailini Boş Geçemezsiniz." />
+        <MudTextField Label="Password" Class="mt-3" @bind-Value="createWriter.Password" For="@(() => createWriter.Password)" Required="true" RequiredError="Yazar Şifresini Boş Geçemezsiniz." />
+        <MudTextField Lines="5" Label="About" Class="mt-3" @bind-Value="createWriter.About" For="@(() => createWriter.About)" Required="true" RequiredError="Yazar Hakkında Alanını Boş Geçemezsiniz." />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="CreateWriter">Ekle</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+    CreateWriter createWriter = new();
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async void CreateWriter()
+    {
+        var data = await _writerService.AddWriter(createWriter);
+        MudDialog.Close(DialogResult.Ok(data.WriterDTO.FirstName));
+        _snackBar.Add($"{data.WriterDTO.FirstName} {data.WriterDTO.LastName} Sisteme Eklendi", Severity.Success);
+    }
+}

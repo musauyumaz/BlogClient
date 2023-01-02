@@ -1,0 +1,32 @@
+﻿@inject IWriterService _writerService;
+
+<MudDialog>
+    <DialogContent>
+        <MudList Clickable="true">
+            @foreach (var item in GetHeadingsByWriterId.Headings)
+            {
+                <MudListItem Avatar="@Icons.Material.Filled.Umbrella">
+                    @item
+                </MudListItem>
+            }
+        </MudList>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public int Id { get; set; }
+    GetHeadingsByWriterId GetHeadingsByWriterId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetHeadingsByWriterId = await _writerService.GetHeadingsByWriterId(Id);
+    }
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+
+
+
+}
