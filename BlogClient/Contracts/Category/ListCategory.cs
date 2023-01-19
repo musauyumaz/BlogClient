@@ -9,7 +9,7 @@
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }
-    public class Root
+    public class ListCategoryData
     {
         public List<ListCategory> Categories { get; set; }
         public int TotalCategoryCount { get; set; }

@@ -43,7 +43,7 @@
 
     private async Task DeleteCategory(int id)
     {
-        Category category = (await _categoryService.DeleteCategory(id)).CategoryDTO;
+        Category category = (await _categoryService.DeleteCategory(id)).Data;
         _snackBar.Add($"{category.Name} Başarıyla Silinmiştir", Severity.Success);
         await OnDeletedItem.InvokeAsync();
     }

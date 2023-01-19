@@ -1,6 +1,6 @@
 ﻿namespace BlogClient.Contracts.Category
 {
-    public class CategoryUpdate
+    public class UpdateCategory
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,6 +10,6 @@
     }
     public class CategoryUpdateRoot
     {
-        public CategoryUpdate UpdateCategoryDTO { get; set; }
+        public UpdateCategory UpdateCategoryDTO { get; set; }
     }
 }

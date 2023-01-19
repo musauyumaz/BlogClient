@@ -11,6 +11,7 @@
         <MudTextField Label="FirstName" @bind-Value="createWriter.FirstName" For="@(() => createWriter.FirstName)" Required="true" RequiredError="Yazar Adını Boş Geçemezsiniz!" />
         <MudTextField Label="LastName" Class="mt-3" @bind-Value="createWriter.LastName" For="@(() => createWriter.LastName)" Required="true" RequiredError="Yazar Soyadını Boş Geçemezsiniz." />
         <MudTextField Label="Email" Class="mt-3" @bind-Value="createWriter.Email" For="@(() => createWriter.Email)" Required="true" RequiredError="Yazar Emailini Boş Geçemezsiniz." />
+        <MudTextField Label="Title" Class="mt-3" @bind-Value="createWriter.Title" For="@(() => createWriter.Title)" Required="true" RequiredError="Yazar Başlık Alanını Boş Geçemezsiniz." />
         <MudTextField Label="Password" Class="mt-3" @bind-Value="createWriter.Password" For="@(() => createWriter.Password)" Required="true" RequiredError="Yazar Şifresini Boş Geçemezsiniz." />
         <MudTextField Lines="5" Label="About" Class="mt-3" @bind-Value="createWriter.About" For="@(() => createWriter.About)" Required="true" RequiredError="Yazar Hakkında Alanını Boş Geçemezsiniz." />
     </DialogContent>
@@ -31,7 +32,7 @@
     private async void CreateWriter()
     {
         var data = await _writerService.AddWriter(createWriter);
-        MudDialog.Close(DialogResult.Ok(data.WriterDTO.FirstName));
-        _snackBar.Add($"{data.WriterDTO.FirstName} {data.WriterDTO.LastName} Sisteme Eklendi", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(data.Data.FirstName));
+        _snackBar.Add($"{data.Data.FirstName} {data.Data.LastName} Sisteme Eklendi", Severity.Success);
     }
 }

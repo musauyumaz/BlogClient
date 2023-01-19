@@ -23,7 +23,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        GetCategoryWithHeadings = await _categoryService.GetCategoryWithHeadings(Id);
+        GetCategoryWithHeadings = (await _categoryService.GetCategoryWithHeadings(Id)).Data;
     }
     void Submit() => MudDialog.Close(DialogResult.Ok(true));
     void Cancel() => MudDialog.Cancel();

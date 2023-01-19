@@ -5,6 +5,7 @@
         <MudTextField Label="FirstName" @bind-Value="updateWriter.FirstName" For="@(() => updateWriter.FirstName)" Required="true" RequiredError="Yazar Adını Boş Geçemezsiniz!" />
         <MudTextField Label="LastName" Class="mt-3" @bind-Value="updateWriter.LastName" For="@(() => updateWriter.LastName)" Required="true" RequiredError="Yazar Soyadını Boş Geçemezsiniz." />
         <MudTextField Label="Email" Class="mt-3" @bind-Value="updateWriter.Email" For="@(() => updateWriter.Email)" Required="true" RequiredError="Yazar Emailini Boş Geçemezsiniz." />
+        <MudTextField Label="Title" Class="mt-3" @bind-Value="updateWriter.Title" For="@(() => updateWriter.Title)" Required="true" RequiredError="Yazar Başlık Alanını Boş Geçemezsiniz." />
         <MudTextField Lines="5" Label="About" Class="mt-3" @bind-Value="updateWriter.About" For="@(() => updateWriter.About)" Required="true" RequiredError="Yazar Hakkında Alanını Boş Geçemezsiniz." />
         <MudRadioGroup @bind-SelectedOption="updateWriter.IsActive">
             <MudRadio Option="true" Color="Color.Primary" Dense="true">Aktif</MudRadio>
@@ -13,7 +14,8 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Success" OnClick="UpdateCategory">Güncelle</MudButton>
+        <MudButton Color="Color.Success" OnClick="UpdateWriter">Güncelle</MudButton>
+        <MudButton Color="Color.Error" OnClick="DeleteWriter">Sil</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
@@ -25,19 +27,27 @@
 
     protected async override Task OnInitializedAsync()
     {
-        Writer writer = (await _writerService.GetWriterById(Id)).WriterDTO;
+        Writer writer = (await _writerService.GetWriterById(Id)).Data;
         updateWriter.Id = writer.Id;
         updateWriter.FirstName = writer.FirstName;
         updateWriter.Email = writer.Email;
         updateWriter.LastName = writer.LastName;
         updateWriter.About = writer.About;
+        updateWriter.Title = writer.Title;
         updateWriter.IsActive = writer.IsActive;
     }
 
-    private async Task UpdateCategory()
+    private async Task UpdateWriter()
     {
         var data = await _writerService.UpdateWriter(updateWriter);
-        _snackBar.Add($"{data.WriterDTO.FirstName} {data.WriterDTO.LastName} Güncellendi", Severity.Success);
+        _snackBar.Add($"{data.Data.FirstName} {data.Data.LastName} Güncellendi", Severity.Success);
         MudDialog.Close(DialogResult.Ok(true));
     }
+    private async Task DeleteWriter()
+    {
+        var data = await _writerService.DeleteWriter(Id);
+        _snackBar.Add($"{data.Data.FirstName} {data.Data.LastName} Silindi", Severity.Error);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
 }

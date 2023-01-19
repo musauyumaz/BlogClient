@@ -16,6 +16,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IHttpClientService, HttpClientService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IWriterService, WriterService>();
+builder.Services.AddScoped<IHeadingService, HeadingService>();
 
 builder.Services.AddMudServices(options =>
 {

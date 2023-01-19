@@ -1,4 +1,5 @@
-﻿@inject ICategoryService _categoryService;
+﻿@using BlogClient.Contracts;
+@inject ICategoryService _categoryService;
 @inject ISnackbar _snackBar;
 <MudDialog>
     <DialogContent>
@@ -16,7 +17,7 @@
 </MudDialog>
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    CategoryUpdate categoryUpdate = new();
+    UpdateCategory categoryUpdate = new();
     CategoryUpdateRoot categoryUpdateRoot = new();
     [Parameter] public int Id { get; set; }
 
@@ -24,7 +25,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        Category category = (await _categoryService.GetCategoryById(Id)).CategoryDTO;
+        Category category = (await _categoryService.GetCategoryById(Id)).Data;
         categoryUpdate.Id = category.Id;
         categoryUpdate.Name = category.Name;
         categoryUpdate.Description = category.Description;
@@ -34,7 +35,7 @@
     private async Task UpdateCategory()
     {
         categoryUpdateRoot.UpdateCategoryDTO = categoryUpdate;
-        var data = await _categoryService.UpdateCategory(categoryUpdateRoot);
+        BaseContract<Category> data = await _categoryService.UpdateCategory(categoryUpdateRoot);
         _snackBar.Add($"{categoryUpdate.Name} Güncellendi", Severity.Success);
         MudDialog.Close(DialogResult.Ok(true));
     }

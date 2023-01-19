@@ -1,0 +1,52 @@
+﻿@layout AdminLayout
+@page "/admin/heading"
+@using BlogClient.Contracts.Heading;
+
+@inject IHeadingService _headingService;
+
+<h1>Başlıklar</h1>
+<MudTable @ref="@_table" Items="@Headings" RowsPerPage="5" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>#</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Category Name</MudTh>
+        <MudTh>Writer Fullname</MudTh>
+        <MudTh>Created Date</MudTh>
+        <MudTh>Updated Date</MudTh>
+        <MudTh>Is Active</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTh>@context.Id</MudTh>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Category Name">@context.CategoryName</MudTd>
+        <MudTd DataLabel="Writer FullName">@context.WriterFullName</MudTd>
+        <MudTd DataLabel="Created Date">@context.CreatedDate</MudTd>
+        <MudTd DataLabel="Updated Date">@context.UpdatedDate</MudTd>
+        <MudTd DataLabel="Is Active">@context.IsActive</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudPagination SelectedChanged="OnPageChanged" Count="(CountData % 5 == 0 ? (CountData / 5) : (CountData / 5) + 1)" Class="pa-4" />
+    </PagerContent>
+</MudTable>
+
+
+@code {
+    private MudTable<ListHeading> _table;
+    [Parameter] public IEnumerable<ListHeading> Headings { get; set; }
+    [Parameter] public EventCallback OnDeletedItem { get; set; }
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+    [Parameter] public EventCallback<int> OnHeadingClicked { get; set; }
+    [Parameter] public int CountData { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync(0, 20);
+    }
+
+    public async Task LoadDataAsync(int page = 0, int size = 5)
+    {
+        var data = (await _headingService.GetHeadingList(page, size));
+        Headings = data.Data.Headings;
+        CountData = data.Data.TotalHeadingCount;
+    }
+}

@@ -12,7 +12,7 @@
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
     </MudAppBar>
-    
+
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
         <MudPaper Width="250px" Class="py-3" Elevation="0">
             <MudNavMenu>
@@ -20,7 +20,7 @@
                 @*<MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Secondary Text</MudText>*@
                 <MudDivider Class="my-2" />
                 <MudNavLink Href="/admin/category">Kategoriler</MudNavLink>
-                <MudNavLink Href="#">Başlıklar</MudNavLink>
+                <MudNavLink Href="/admin/heading">Başlıklar</MudNavLink>
                 <MudNavLink Href="/admin/writer">Yazarlar</MudNavLink>
                 <MudNavGroup Title="Grafikler" Expanded="true">
                     <MudNavLink Href="#">Grafik 1</MudNavLink>
@@ -53,7 +53,7 @@
         _drawerOpen = !_drawerOpen;
     }
 
-    
+
 }
 
 

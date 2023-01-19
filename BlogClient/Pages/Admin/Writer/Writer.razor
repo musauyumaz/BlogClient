@@ -47,7 +47,7 @@
                         <div class="col-12 col-sm-6 col-md-3 d-flex align-items-stretch mb-5">
                             <div class="card bg-light">
                                 <div class="card-header text-muted border-bottom-0">
-                                    Digital Strategist
+                                    @writer.Title
                                 </div>
                                 <div class="card-body pt-0">
                                     <div class="row">
@@ -91,7 +91,7 @@
     }
     async Task ListWriterAsync()
     {
-        writers = await _writerService.GetWriterList(0, 12);
+        writers = (await _writerService.GetWriterList(0, 12)).Data;
     }
 
     async Task OpenCreateWriterDialog()

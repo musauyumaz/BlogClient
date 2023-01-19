@@ -20,8 +20,8 @@
     public async Task LoadDataAsync(int page = 0, int size = 5)
     {
         var data = (await _categoryService.GetCategoryList(page, size));
-        Categories = data.listCategories;
-        DataCount = data.totalCategoryCount;
+        Categories = data.Data.Categories;
+        DataCount = data.Data.TotalCategoryCount;
     }
     public async Task OpenCreateCategoryDialogAsync()
     {

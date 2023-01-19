@@ -1,14 +1,15 @@
-﻿using BlogClient.Contracts.Writer;
+﻿using BlogClient.Contracts;
+using BlogClient.Contracts.Writer;
 
 namespace BlogClient.Services.Models.Abstract
 {
     public interface IWriterService
     {
-        Task<ListWriterResponse> GetWriterList(int page, int size);
-        Task<WriterResponse> GetWriterById(int id);
-        Task<WriterResponse> DeleteWriter(int id);
-        Task<WriterResponse> AddWriter(CreateWriter createWriter);
-        Task<WriterResponse> UpdateWriter(UpdateWriter updateWriter);
-        Task<GetHeadingsByWriterId> GetHeadingsByWriterId(int writerId);
+        Task<BaseContract<ListWriterResponse>> GetWriterList(int page, int size);
+        Task<BaseContract<Writer>> GetWriterById(int id);
+        Task<BaseContract<Writer>> DeleteWriter(int id);
+        Task<BaseContract<Writer>> AddWriter(CreateWriter createWriter);
+        Task<BaseContract<Writer>> UpdateWriter(UpdateWriter updateWriter);
+        Task<BaseContract<GetHeadingsByWriterId>> GetHeadingsByWriterId(int writerId);
     }
 }

@@ -35,7 +35,7 @@
     private async Task CreateCategory()
     {
         var data = await CategoryService.AddCategory(category);
-        _snackBar.Add($"{data.CategoryDTO.Name} Sisteme Eklendi", Severity.Success);
+        _snackBar.Add($"{data.Data.Name} Sisteme Eklendi", Severity.Success);
         await OnAddedItem.InvokeAsync();
         category.Description = String.Empty;
         category.Name = String.Empty;

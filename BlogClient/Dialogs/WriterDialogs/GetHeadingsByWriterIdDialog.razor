@@ -22,7 +22,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        GetHeadingsByWriterId = await _writerService.GetHeadingsByWriterId(Id);
+        GetHeadingsByWriterId = (await _writerService.GetHeadingsByWriterId(Id)).Data;
     }
     void Submit() => MudDialog.Close(DialogResult.Ok(true));
     void Cancel() => MudDialog.Cancel();
